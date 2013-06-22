@@ -1,14 +1,14 @@
 ﻿(function (ns, undefined) {
     var ExpensesView = Backbone.View.extend({
 
-        template: _.template($("#expenses-tmpl").html()),
+        collection: new xpss.ExpensesList(),
+
+        template: _.template(xpss.templates.expenses),
 
         initialize: function () {
             this.collection.on('reset', function() {
                 this.render();
             }, this);
-
-            this.render();
         },
 
         render: function () {

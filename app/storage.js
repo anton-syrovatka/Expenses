@@ -1,7 +1,7 @@
 ﻿var data = [
     { id: 1, info: 'drinks', amount: 55,   date: '10.07.2013' },
     { id: 4, info: 'food',   amount: 10.5, date: '11.05.2013' },
-    { id: 2, info: 'girls',  amount: 1000, date: '23.06.2013' },
+    { id: 2, info: 'girls',  amount: 1000, date: '23.05.2013' },
     { id: 5, info: 'dog',    amount: 23.2, date: '11.10.2012' },
     { id: 3, info: 'drinks', amount: 51,   date: '11.07.2013' },
     { id: 7, info: 'food',   amount: 40.5, date: '12.05.2013' },
@@ -43,7 +43,7 @@ function getTimeLine() {
 
             for (var month in oneYearSpan) {
                 if (oneYearSpan.hasOwnProperty(month)) {
-                    var item = new xpss.TimeLineItem({
+                    var item = new xpss.Month({
                         year: parseInt(year),
                         month: parseInt(month),
                         expenses: new xpss.ExpensesList(oneYearSpan[month])

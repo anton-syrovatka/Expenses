@@ -1,12 +1,13 @@
 ﻿(function (ns, undefined) {
     var AppView = Backbone.View.extend({
         
-        el: ('#main'),
+        id: 'main',
+
+        template: _.template(xpss.templates.app),
 
         events: {
-            'click .time-line-item': 'selectMonth',
-            'click #btn-left': 'adjustBackwar',
-            'click #btn-right': 'adjustForward'
+            'click #btn-left': 'onLeftButtonClick',
+            'click #btn-right': 'onRightButtonClick'
         },
 
         initialize: function () {
@@ -14,57 +15,24 @@
             this.btnRight = this.$('#btn-righ');
 
             this.months = getTimeLine();
-
-
-            this.render();
         },
 
         render: function () {
-            var currentMonth = xpss.TimeLine.getCurrenMonth(this.months);
-            this.selectedMonthLabel = new xpss.SelectedMonthView({
-                el: this.$("#selected-month"),
-                model: currentMonth
-            });
-
-            var fourMonths = xpss.TimeLine.getMonthsFromNow(4, this.months);
+            this.$el.html(this.template());
             this.timeLine = new xpss.TimeLineView({
                 el: this.$("#time-line"),
-                collection: new xpss.TimeLine(fourMonths)
-            });
-
-            this.details = new xpss.ExpensesView({
-                 el: this.$("#details"),
-                 collection: new xpss.ExpensesList(currentMonth.get('expenses').models)
-            });
+                collection: this.months
+            }).render();
 
             return this;
         },
-
-        selectMonth: function (event) {
-            var $element = $(event.currentTarget);
-           // $element.addClass('active').siblings().removeClass('active');
-
-            var cid = $element.attr('id');
-            var selectedMonth = this.timeLine.collection.get(cid);
-            this.selectedMonthLabel.model.set(selectedMonth.toJSON());
-            this.details.collection.reset(selectedMonth.get('expenses').models);
-
-        },
         
-        adjustBackwar: function (event) {
-            this.timeLine.collection.pop();
-            var first = this.timeLine.collection.first();
-            var prevMonth = xpss.TimeLine.getPrevMonth(first, this.months);
-            this.timeLine.collection.unshift(prevMonth);
+        onLeftButtonClick: function (event) {
+            this.timeLine.adjustBackward(event);
         },
 
-        adjustForward: function (event) {
-            if (!this.timeLine.collection.last().isCurrent()) {
-                this.timeLine.collection.shift();
-                var last = this.timeLine.collection.last();
-                var nextMonth = xpss.TimeLine.getNextMonth(last, this.months);
-                this.timeLine.collection.push(nextMonth);
-            }
+        onRightButtonClick: function (event) {
+            this.timeLine.adjustForward(event);
         }
     });
     

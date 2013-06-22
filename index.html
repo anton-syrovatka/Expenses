@@ -5,24 +5,29 @@
     <title>Backbone.js Expenses</title>
     <style type="text/css">
         #main {
-            width: 400px;
             margin: 50px auto;
+            min-width: 655px;
+            width: 655px;
         }
 
-        #time-line {
-            overflow: auto;
+            #main > div {
+                float: left;
+            }
+
+        #time-line-filter {
             border: 2px solid black;
             margin-bottom: 20px;
+            overflow: auto;
         }
 
-        .time-line-item {
-            width: 24.6%;
-            height: 150px;
-            float: left;
+        .month {
             border-right: 2px solid black;
+            float: left;
+            height: 150px;
+            width: 100px;
         }
 
-            .time-line-item:last-child {
+            .month:last-child {
                 border: none;
             }
 
@@ -35,57 +40,22 @@
             background-color: cyan;
         }
 
-        #btn-left {
-            left: -50px;
-            position: relative;
-            top: 90px;
-        }
-
-        #btn-right {
-            position: relative;
-            right: -375px;
-            top: 90px;
+        #btn-left, #btn-right {
+            margin: 75px 20px;
         }
     </style>
 </head>
 <body>
-    <div id="main">
-        <button id="btn-left"><=</button>
-        <button id="btn-right">=></button>
-        <div id="selected-month"></div>
-        <div id="time-line">
-        </div>
-        <div id="details">
-        </div>
-    </div>
-
-    <script id="time-line-item-tmpl" type="text/html">
-        <p><%= title %></p>
-        <p><%= expensesCount %></p>
-        <p><%= totalAmount %> eur</p>
-    </script>
-
-    <script id="expenses-tmpl" type="text/html">
-        <table id="expenses">
-            <% _.each(model, function(e, index){ %>
-            <tr>
-                <td><%= index + 1 %></td>
-                <td><%= e.info %></td>
-                <td><%= e.date %></td>
-                <td><%= e.amount %> eur</td>
-            </tr>
-            <% }); %>
-        </table>
-    </script>
-
     <script src="libs/jquery-2.0.2.min.js"></script>
     <script src="libs/underscore.min.js"></script>
     <script src="libs/moment.min.js"></script>
     <script src="libs/backbone.min.js"></script>
+    <script src="app/templates.js"></script>
     <script src="app/models/expense.js"></script>
-    <script src="app/models/timeLineItem.js"></script>
+    <script src="app/models/month.js"></script>
     <script src="app/views/expenses.js"></script>
     <script src="app/views/selectedMonth.js"></script>
+    <script src="app/views/timeLineFilter.js"></script>
     <script src="app/views/timeLine.js"></script>
     <script src="app/storage.js"></script>
     <script src="app/views/app.js"></script>

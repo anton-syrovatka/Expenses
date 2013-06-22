@@ -1,45 +1,93 @@
 ﻿(function (ns, undefined) {
     var TimeLineView = Backbone.View.extend({
         
-        initialize: function () {
-            this.collection.on('reset', function () {
-                this.render();
-            }, this);
-            
-            this.collection.on('add', function () {
-                this.render();
-            }, this);
+        events: {
+            'click .month': 'onMonthClick'
+        },
 
-            this.render();
+        template: _.template(xpss.templates.timeLine),
+
+        monthsNumber: 4,
+        
+        collection: new xpss.TimeLine(),
+
+        initialize: function () {
         },
 
         render: function () {
-            this.$el.empty();
-            _.each(this.collection.models, function(timeLineItem) {
-                this.$el.append(new TimeLineItemView({ model: timeLineItem }).render().el);
-            }, this);
+            this.$el.html(this.template());
+            
+            var currentMonth = xpss.TimeLine.getCurrenMonth(this.collection);
+            this.selectedMonthLabel = new xpss.SelectedMonthView({
+                el: this.$("#selected-month"),
+                model: currentMonth
+            }).render();
+            
+            var months = xpss.TimeLine.getMonthsFromNow(this.monthsNumber, this.collection);
+            this.timeLineFilter = new xpss.TimeLineFilterView({
+                el: this.$("#time-line-filter"),
+                collection: new xpss.TimeLine(months)
+            }).render();
+
+            this.monthExpenses = new xpss.ExpensesView({
+                el: this.$("#month-expenses"),
+                 collection: new xpss.ExpensesList(currentMonth.get('expenses').models)
+            }).render();
+            
+            this.highLightSelectedMonth();
             return this;
-        }
-    });
+        },
 
-    var TimeLineItemView = Backbone.View.extend({
+        adjustBackward: function (event) {
+            this.timeLineFilter.collection.pop();
+            var first = this.timeLineFilter.collection.first();
+            var prevMonth = xpss.TimeLine.getPrevMonth(first, this.collection);
+            this.timeLineFilter.collection.unshift(prevMonth);
+            this.highLightSelectedMonth();
+        },
 
-        template: _.template($('#time-line-item-tmpl').html()),
+        adjustForward: function (event) {
+            if (!this.timeLineFilter.collection.last().isCurrent()) {
+                this.timeLineFilter.collection.shift();
+                var last = this.timeLineFilter.collection.last();
+                var nextMonth = xpss.TimeLine.getNextMonth(last, this.collection);
+                this.timeLineFilter.collection.push(nextMonth);
+                this.highLightSelectedMonth();
+            }
+        },
+
+        onMonthClick: function (event) {
+            var $element = $(event.currentTarget);
+            this.highLightMonthElement($element);
+
+            var cid = $element.attr('id');
+            this.setSelectedMonth(cid);
+        },
         
-        className: 'time-line-item',
-
-        render: function () {
-            this.$el.attr('id', this.model.cid);
-            this.$el.html(this.template({
-                title: this.model.title(),
-                expensesCount: this.model.expensesCount(),
-                totalAmount: this.model.totalAmount()
-            }));
-            return this;
+        setSelectedMonth: function(id) {
+            var selectedMonth = this.timeLineFilter.collection.get(id);
+            this.selectedMonthLabel.model.set(selectedMonth.toJSON());
+            this.monthExpenses.collection.reset(selectedMonth.get('expenses').models);
+        },
+        
+        highLightSelectedMonth: function () {
+            var selectedMonth = this.selectedMonthLabel.model;
+            selectedMonth = this.timeLineFilter.collection.findWhere(
+                {
+                    year: selectedMonth.get('year'),
+                    month: selectedMonth.get('month')
+                });
+            if (selectedMonth) {
+                var $element = this.$('.month[id="' + selectedMonth.cid + '"]');
+                this.highLightMonthElement($element);
+            }
+        },
+        
+        highLightMonthElement: function($element) {
+            $element.hasClass('month') && $element.addClass('active').siblings().removeClass('active');
         }
     });
 
     ns.TimeLineView = TimeLineView;
-    ns.TimeLineItemView = TimeLineItemView;
-    
+
 }(window.xpss = window.xpss || {}))

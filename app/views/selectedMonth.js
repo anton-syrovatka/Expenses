@@ -5,8 +5,6 @@
             this.model.on('change', function () {
                 this.render();
             }, this);
-
-            this.render();
         },
 
         render: function () {
