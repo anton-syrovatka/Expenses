@@ -9,9 +9,9 @@
     { id: 9, info: 'dog',    amount: 29.2, date: '13.10.2012' },
     { id: 10, info: 'dog',   amount: 21.2, date: '02.01.2012' },
     { id: 11, info: 'dog',   amount: 292.2,date: '14.01.2012' },
-    { id: 12, info: 'dog',   amount: 2.2,date: '16.01.2013' },
-    { id: 13, info: 'dog',   amount: 92.2,date: '17.03.2013' },
-    { id: 14, info: 'dog',   amount: 22.2,date: '19.02.2013' }
+    { id: 12, info: 'dog',   amount: 2.2,  date: '16.01.2013' },
+    { id: 13, info: 'dog',   amount: 92.2, date: '17.03.2013' },
+    { id: 14, info: 'dog',   amount: 22.2, date: '19.02.2013' }
 ];
 
 _.each(data, function (item) {

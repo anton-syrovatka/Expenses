@@ -12,6 +12,8 @@
         collection: new xpss.TimeLine(),
 
         initialize: function () {
+            //this.currentMonth = xpss.TimeLine.getCurrenMonth(this.collection);
+            //this.displayedMonths = xpss.TimeLine.getMonthsFromNow(this.monthsNumber, this.collection);
         },
 
         render: function () {
@@ -30,9 +32,10 @@
             }).render();
 
             this.monthExpenses = new xpss.ExpensesView({
-                el: this.$("#month-expenses"),
-                 collection: new xpss.ExpensesList(currentMonth.get('expenses').models)
-            }).render();
+                collection: new xpss.ExpensesList(currentMonth.get('expenses').models)
+            });
+
+            this.$("#month-expenses").append(this.monthExpenses.render().el);
             
             this.highLightSelectedMonth();
             return this;
