@@ -12,8 +12,6 @@
         collection: new xpss.TimeLine(),
 
         initialize: function () {
-            //this.currentMonth = xpss.TimeLine.getCurrenMonth(this.collection);
-            //this.displayedMonths = xpss.TimeLine.getMonthsFromNow(this.monthsNumber, this.collection);
         },
 
         render: function () {

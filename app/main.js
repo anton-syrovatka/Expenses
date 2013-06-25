@@ -1,5 +1,3 @@
-﻿//_.templateSettings.variable = "model";
-
-$(function () {
+﻿$(function () {
     $('body').prepend(new xpss.AppView().render().el);
 });

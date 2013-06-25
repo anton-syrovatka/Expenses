@@ -14,7 +14,7 @@
             this.btnLeft = this.$('#btn-left');
             this.btnRight = this.$('#btn-righ');
 
-            this.months = getTimeLine();
+            this.months = xpss.getTimeLine();
         },
 
         render: function () {
